@@ -1,0 +1,14 @@
+<workspace name="CIGRE_MV_PSCAD" version="5.0.2">
+  <projects>
+    <project type="project" name="CIGRE_MV_PSCAD" filepath=".\CIGRE_MV_PSCAD.pscx" />
+  </projects>
+  <simulations />
+  <pmr />
+  <messagegrid expanded="">
+    <column name="Icon" />
+    <column name="Id" />
+    <column name="Component" />
+    <column name="Namespace" />
+    <column name="Description" />
+  </messagegrid>
+</workspace>

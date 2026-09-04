@@ -1,0 +1,19 @@
+# PSCAD build folders, executables and exports: never commit
+*.gf81*/
+*.gf46*/
+*.if1*/
+*.exe
+*.o
+*.obj
+*.out
+*.inf
+*.infx
+*.bakx
+*.psmx
+*.map
+*.mak
+*.dta
+*.snp
+*.psout
+__pycache__/
+*.pyc

@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this model, please cite it as below and cite CIGRE Technical Brochure 575."
+title: "CIGRE-MV-PSCAD: PSCAD implementation of the CIGRE European MV distribution benchmark for EMT studies"
+authors:
+  - family-names: Bhattarai
+    given-names: Panas
+version: "1.0.0"
+date-released: "2026-09-04"
+license: BSD-3-Clause
+references:
+  - type: report
+    title: "Benchmark Systems for Network Integration of Renewable and Distributed Energy Resources"
+    authors:
+      - name: "CIGRE Task Force C6.04.02"
+    year: 2014
+    number: "Technical Brochure 575"
+  - type: conference-paper
+    title: "Design of benchmark of medium voltage distribution network for investigation of DG integration"
+    authors:
+      - family-names: Rudion
+        given-names: K.
+      - family-names: Orths
+        given-names: A.
+      - family-names: Styczynski
+        given-names: Z. A.
+      - family-names: Strunz
+        given-names: K.
+    year: 2006
+    conference: "IEEE PES General Meeting"
+    doi: "10.1109/PES.2006.1709447"
