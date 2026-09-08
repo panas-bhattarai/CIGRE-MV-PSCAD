@@ -1,8 +1,8 @@
 # CIGRE-MV-PSCAD: an open PSCAD implementation of the CIGRE European medium-voltage benchmark network for electromagnetic transient studies
 
 <table class="byline" align="center"><tr>
-<td align="center"><b>Panas Bhattarai</b><br>panas.bhattarai@equagen.com</td>
-<td align="center"><b>Rabindra Maharjan</b><br>rabindra.maharjan@equagen.com</td>
+<td align="center" valign="top"><b>Panas Bhattarai</b><br>panas.bhattarai@equagen.com<br>acpanasbhattarai@gmail.com</td>
+<td align="center" valign="top"><b>Rabindra Maharjan</b><br>rabindra.maharjan@equagen.com</td>
 </tr></table>
 
 <p class="meta" align="center">September 2026. Version 1.0. Licence BSD-3-Clause.</p>
