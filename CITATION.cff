@@ -4,6 +4,10 @@ title: "CIGRE-MV-PSCAD: PSCAD implementation of the CIGRE European MV distributi
 authors:
   - family-names: Bhattarai
     given-names: Panas
+    email: panas.bhattarai@equagen.com
+  - family-names: Maharjan
+    given-names: Rabindra
+    email: rabindra.maharjan@equagen.com
 version: "1.0.0"
 date-released: "2026-09-04"
 license: BSD-3-Clause

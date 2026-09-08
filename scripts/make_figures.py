@@ -108,17 +108,18 @@ def fig_voltage_profile():
     save(fig, "fig02_voltage_profile")
     fig, ax = plt.subplots(figsize=(6.4, 2.8))
     w = 0.38
-    ax.bar([x - w / 2 for x in b], [r["err_pp_pct"] for r in rows], w, color=C["orange"], label="vs pandapower (same data, load bias corrected)")
+    ax.bar([x - w / 2 for x in b], [r["err_pp_pct"] for r in rows], w, color=C["orange"], label="vs pandapower (same data)")
     ax.bar([x + w / 2 for x in b], [r["err_tb_pct"] for r in rows], w, color=C["grey"], label="vs brochure Table 9.6")
     ax.axhline(0, color=C["ink"], lw=0.8); ax.set_xticks(b); ax.set_xlabel("bus"); ax.set_ylabel("voltage difference (%)")
-    ax.legend(fontsize=8, loc="lower right"); ax.set_title("EMT bus-voltage difference from the two references", fontsize=10)
+    ax.legend(fontsize=8, loc="lower right", bbox_to_anchor=(1.0, 1.0), borderaxespad=0)
+    ax.set_title("EMT bus-voltage difference", fontsize=10, loc="left", pad=12)
     save(fig, "fig03_voltage_error")
 
 # ---------------------------------------------------------------- 4 fixed load test
 def fig_fixed_load():
     r = load_json("fixed_load_test.json"); s = load_json("fixed_load_settle.json")
     if not r: return
-    fig, axs = plt.subplots(1, 2, figsize=(6.6, 2.9))
+    fig, axs = plt.subplots(2, 1, figsize=(6.4, 5.6))
     ax = axs[0]
     for exp, col, lab, mk in ((0, C["blue"], "exponent 0 (constant power)", "o"), (2, C["orange"], "exponent 2 (constant impedance)", "s")):
         pts = sorted([(v["Vpu"][0], v["P_MW"] * 1e3) for k, v in r.items() if v["NP"] == exp])
@@ -126,7 +127,7 @@ def fig_fixed_load():
     vv = np.linspace(0.88, 1.02, 50); P0 = r["exp2_V1.00"]["P_set"] * 1e3
     ax.plot(vv, P0 * vv ** 2, color=C["orange"], lw=0.8, ls=":", label="P₀·V² (theory)")
     ax.axhline(P0, color=C["blue"], lw=0.8, ls=":", label="P₀ setpoint")
-    ax.set_xlabel("terminal voltage (pu)"); ax.set_ylabel("three-phase P drawn (kW)"); ax.legend(fontsize=7, loc="center left")
+    ax.set_xlabel("terminal voltage (pu)"); ax.set_ylabel("three-phase P drawn (kW)"); ax.legend(fontsize=8, loc="lower right")
     ax.set_title("Master-library fixed load, bus 3 residential", fontsize=9)
     ax = axs[1]
     if s:
@@ -134,7 +135,7 @@ def fig_fixed_load():
             if k in s:
                 ax.plot([w[0] for w in s[k]], [w[4] for w in s[k]], color=col, marker="o", ms=3, lw=1.5, label=k.replace("exp0_V0.90_", "").replace("_", " "))
         ax.axhline(0, color=C["ink"], lw=0.8); ax.set_ylim(-0.2, 1.0)
-        ax.set_xlabel("time (s)"); ax.set_ylabel("P error vs setpoint (%)"); ax.legend(fontsize=7)
+        ax.set_xlabel("time (s)"); ax.set_ylabel("P error vs setpoint (%)"); ax.legend(fontsize=8, loc="center right")
         ax.set_title("Constant-power bias vs time and step", fontsize=9)
     save(fig, "fig04_fixed_load")
 
@@ -144,7 +145,7 @@ def fig_short_circuit():
     if not nl: return
     keys = ["sc_3ph_b1", "sc_1ph_b1", "sc_3ph_b11", "sc_1ph_b11"]
     labels = ["3-ph, bus 1", "1-ph, bus 1", "3-ph, bus 11", "1-ph, bus 11"]
-    fig, axs = plt.subplots(1, 2, figsize=(6.6, 2.9), gridspec_kw=dict(width_ratios=[1.3, 1]))
+    fig, axs = plt.subplots(2, 1, figsize=(6.4, 5.6))
     ax = axs[0]; x = np.arange(4); w = 0.26
     ax.bar(x - w, [nl[k]["I_hand_kA"] for k in keys], w, color=C["grey"], label="hand Thevenin (no load)")
     ax.bar(x, [nl[k]["I_emt_kA"] for k in keys], w, color=C["blue"], label="EMT, loads at 0.1 %")
@@ -182,8 +183,8 @@ def fig_impedance_scan():
     axs[1].plot(fs, np.degrees(np.angle(zz)), color=C["grey"], lw=2)
     axs[1].plot(fe, ae, "o", color=C["blue"], ms=6)
     axs[1].set_ylabel("angle (°)"); axs[1].set_xlabel("frequency (Hz)")
-    for h, lab in ((250, "5th"), (350, "7th"), (550, "11th"), (650, "13th")):
-        axs[0].axvline(h, color="#d9d8d3", lw=0.8, zorder=0); axs[0].text(h + 5, axs[0].get_ylim()[1] * 0.93, lab, fontsize=7, color=C["grey"])
+    for h, lab, frac in ((250, "5th", 0.93), (350, "7th", 0.85), (550, "11th", 0.93), (650, "13th", 0.85)):
+        axs[0].axvline(h, color="#d9d8d3", lw=0.8, zorder=0); axs[0].text(h + 6, axs[0].get_ylim()[1] * frac, lab, fontsize=7, color=C["grey"])
     save(fig, "fig07_impedance_scan")
 
 # ---------------------------------------------------------------- 8 variants
@@ -192,7 +193,7 @@ def fig_variants():
     if not (a and m): return
     rows = lambda v: [r for r in v["buses"] if r["bus"] > 0]
     b = [r["bus"] for r in rows(a)]; base = [r["emt_kv"] for r in rows(a)]
-    fig, axs = plt.subplots(1, 2, figsize=(6.6, 3.0))
+    fig, axs = plt.subplots(2, 1, figsize=(6.4, 5.6))
     ax = axs[0]
     f1 = [r for r in rows(a) if r["bus"] <= 11]; f1m = [r for r in rows(m) if r["bus"] <= 11]
     ax.plot([r["bus"] for r in f1], [r["emt_kv"] for r in f1], color=C["blue"], lw=2, marker="^", ms=4, label="radial (S1-S3 open)")

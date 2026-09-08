@@ -1,6 +1,11 @@
 # CIGRE-MV-PSCAD: an open PSCAD implementation of the CIGRE European medium-voltage benchmark network for electromagnetic transient studies
 
-**Panas Bhattarai**, September 2026. Version 1.0. Licence BSD-3-Clause. Repository and archive DOI: *to be added at release.*
+<table class="byline" align="center"><tr>
+<td align="center"><b>Panas Bhattarai</b><br>panas.bhattarai@equagen.com</td>
+<td align="center"><b>Rabindra Maharjan</b><br>rabindra.maharjan@equagen.com</td>
+</tr></table>
+
+<p class="meta" align="center">September 2026. Version 1.0. Licence BSD-3-Clause.</p>
 
 ## Abstract
 
@@ -20,7 +25,7 @@ This paper presents CIGRE-MV-PSCAD, an implementation of the European MV benchma
 - **Generated from data.** A Python script builds the model through PSCAD's automation library from a data file in which every parameter carries its source page in the brochure. The model can be regenerated, audited and extended by editing data rather than schematics.
 - **Validated at four levels.** Steady state against an independent load flow and against the brochure's reference table, short-circuit currents against hand calculation, frequency-domain impedance against an analytic sequence-network model, and consistency across time step and switch configuration.
 
-Section 2 describes the benchmark and the data. Section 3 describes the implementation and the choices the brochure leaves open. Section 4 presents the validation. Section 5 discusses limits. Section 6 explains how to use and rebuild the model.
+Section 2 describes the benchmark and the data. Section 3 describes the implementation and the choices the brochure leaves open. Section 4 presents the validation. Section 5 discusses limits.
 
 ## 2. The CIGRE European MV benchmark
 
@@ -54,24 +59,31 @@ Before building the EMT model, the data file was used to build the network in pa
 
 First, the reference table can only be reproduced with the transformer taps at the positions stated in the brochure's Table 9.7 and with bus 0 held at 110 kV. Without the taps the voltages are about 8 % low.
 
-Second, with the taps applied, the load flow of the published data differs from the published table by up to 1.05 % at the feeder-1 end, and the difference grows along the feeder. It is insensitive to the load model, to the stiffness of the 110 kV source and to the transformer resistance, and it worsens if line capacitance is neglected.
+Second, with the taps applied, the load flow of the published data differs from the published table by up to 1.05 % at the feeder-1 end, and the difference grows along the feeder. It is insensitive to the stiffness of the 110 kV source and to the transformer resistance, and it worsens if line capacitance is neglected. The gap is not an error in the data. It is the product of two modelling conventions in the brochure's own calculation:
 
-An earlier version of this section proposed that the brochure's authors had computed their results from conductor geometry or with unrounded loads. **That hypothesis is wrong, and is retracted here.** The gap has since been traced, in the companion Simulink study [18], to two modelling conventions rather than to any error or hidden data:
-
-1. **The transformer impedance is not referred through the tapped ratio.** The brochure states 12 % on a 110/20 kV base and then applies a tap; if the 12 % is held in per-unit on the *untapped* base, as the brochure's own results imply, the ohmic impedance seen from the 20 kV side differs from the value obtained by referring it through the tapped ratio.
+1. **The transformer impedance is not referred through the tapped ratio.** The brochure states 12 % on a 110/20 kV base and then applies a tap. If the 12 % is held in per-unit on the *untapped* base, so that the tap acts only on the ideal ratio, the ohmic impedance seen from the 20 kV side is 1.92 ohm, against 2.17 ohm when it is referred through the tapped ratio as PSCAD, pandapower and a hand calculation do.
 2. **The loads are constant impedance, not constant power.**
 
-Reproducing both conventions reproduces Table 9.6 to **0.032 %** at all fifteen buses, with transformer secondary currents matching to 0.01 %. The two effects are separable: the tap convention contributes a near-uniform offset along each feeder, and the load model contributes the along-feeder slope. TB 575 is therefore internally self-consistent to about 0.05 %; the roughly 1 % gap belongs to the brochure's *method*, not to its data.
+Table 2 gives the load flow of the published data under each combination of the two conventions, computed by `scripts/tb575_conventions.py`. With both of the brochure's conventions adopted, Table 9.6 is reproduced to **0.032 %** at all fifteen buses and the transformer secondary currents to 0.006 %. The two effects are separable: the tap convention contributes a near-uniform offset of about 0.6 % along each feeder, and the load model contributes the along-feeder slope. TB 575 is therefore internally self-consistent to about 0.05 %, and the roughly 1 % gap belongs to the brochure's *method*, not to its data.
 
-The consequence for this work is unchanged in magnitude but changed in kind. An implementation that adopts the modern conventions — impedance referred through the tap, constant-power loads — should expect about 1 % disagreement with Table 9.6, and that figure is used below as the tolerance for the brochure comparison. Exact agreement is instead checked against the pandapower load flow of the same data. The convention choice is not merely cosmetic: it is worth about 0.6 % on bus voltages but **12.3 % on feeder-head fault current** (5.456 kA against 6.126 kA), so a study that inherits the brochure's convention without noticing will misstate short-circuit duty by far more than it misstates voltage.
+*Table 2. Worst bus-voltage error of the published data against Table 9.6, buses 1 to 14, for the four combinations of transformer-tap convention and load model.*
+
+| Transformer impedance | Load model | Worst error | Error at bus 1, bus 11 |
+|---|---|---|---|
+| referred through tapped ratio | constant power | 1.05 % | -0.48 %, -1.05 % |
+| referred through tapped ratio | constant impedance | 0.55 % | -0.53 %, -0.53 % |
+| held on untapped base | constant power | 0.39 % | +0.09 %, -0.39 % |
+| held on untapped base | constant impedance | 0.032 % | -0.01 %, 0.00 % |
+
+The consequence for this work is that an implementation adopting the modern conventions, impedance referred through the tap and constant-power loads, should expect about 1 % disagreement with Table 9.6, and that figure is used below as the tolerance for the brochure comparison. Exact agreement is instead checked against the pandapower load flow of the same data. The convention choice is not merely cosmetic. It is worth about 0.6 % on bus voltages but **12.3 % on feeder-head fault current**, 5.458 kA against 6.130 kA for a three-phase fault at bus 1 with loads ignored, so a study that inherits the brochure's convention without noticing will misstate short-circuit duty by far more than it misstates voltage.
 
 ## 3. Implementation in PSCAD
 
 ### 3.1 Overview
 
-The model is a single PSCAD project, `CIGRE_MV_PSCAD.pscx`, generated by `scripts/build_cigre_mv.py` through the mhi.pscad automation library that ships with PSCAD. Electrical connections are made with node labels BUS_0 to BUS_14, so the canvas is a regular grid of four regions: supply and transformers, the line list, one measurement and load station per bus, and the recorders. Table 2 lists the components.
+The model is a single PSCAD project, `CIGRE_MV_PSCAD.pscx`, generated by `scripts/build_cigre_mv.py` through the mhi.pscad automation library that ships with PSCAD. Electrical connections are made with node labels BUS_0 to BUS_14, so the canvas is a regular grid of four regions: supply and transformers, the line list, one measurement and load station per bus, and the recorders. Table 3 lists the components.
 
-*Table 2. Components of CIGRE-MV-PSCAD (all PSCAD master library).*
+*Table 3. Components of CIGRE-MV-PSCAD (all PSCAD master library).*
 
 | Element | Component | Settings |
 |---|---|---|
@@ -105,7 +117,7 @@ The brochure gives each load as apparent power and power factor, which is comple
 
 The PSCAD master-library fixed load takes P, Q and two voltage exponents, and represents the load as an impedance that is updated from the measured voltage so that P = P0 (V/V0)^NP and Q = Q0 (V/V0)^NQ. Exponent 2 is constant impedance, which is the component's default; exponent 0 is constant power. Figure 2 shows the behaviour of a single load, with the bus 3 residential values, in a standalone test at 1.0 and 0.9 pu terminal voltage. With exponent 2 the drawn power follows V² exactly. With exponent 0 the drawn power is the same at both voltages, as required, but 0.77 % above the setpoint at 50 µs and 0.56 % above it at 12.5 µs. The bias is present from the first cycle and constant for 3 s, so it is not a settling effect; equal bias on P and Q points to a small offset in the component's internal voltage measurement. It is documented rather than corrected, and it shifts the feeder voltages by about 0.1 %.
 
-![Figure 2. Master-library fixed load in a standalone test. Left: power drawn versus terminal voltage for exponent 0 and exponent 2, with the theoretical curves. Right: the constant-power bias versus time at two time steps.](results/figures/fig04_fixed_load.png)
+![Figure 2. Master-library fixed load in a standalone test. Top: power drawn versus terminal voltage for exponent 0 and exponent 2, with the theoretical curves. Bottom: the constant-power bias versus time at two time steps.](results/figures/fig04_fixed_load.png)
 
 Each sector at each bus is one fixed load per phase, so unbalanced loading only requires editing three values. The component starts as a constant impedance and switches to its exponent law after ten cycles, which is visible in Figure 9.
 
@@ -157,7 +169,7 @@ Two practical points were learned in this test. PSCAD writes a source's current 
 
 Figure 8 compares the radial case at 12.5 µs with the 50 µs result and shows the meshed case with S2 and S3 closed. The 12.5 µs run differs from the load flow by 0.018 % at the worst bus against 0.017 % at 50 µs, so 50 µs is adequate for fundamental-frequency work; 12.5 to 20 µs is recommended for harmonic or switching studies. Closing the two loops raises the feeder-1 end voltage from 19.07 to 19.16 kV, and the meshed EMT result agrees with the corresponding load flow within 0.024 %. Switch states are changed by setting two constants on the canvas.
 
-![Figure 8. Left: feeder-1 voltage profile, radial and meshed, with the meshed load flow. Right: bus-voltage differences for the 12.5 µs run and for both configurations against the load flow.](results/figures/fig08_variants.png)
+![Figure 8. Top: feeder-1 voltage profile, radial and meshed, with the meshed load flow. Bottom: bus-voltage differences for the 12.5 µs run and for both configurations against the load flow.](results/figures/fig08_variants.png)
 
 ### 4.5 Start-up
 
@@ -167,38 +179,19 @@ Figure 9 shows the first 500 ms of the base run: the source ramps up over 50 ms,
 
 ## 5. Discussion and limitations
 
-**What the validation establishes.** The four levels together show that the model reproduces the benchmark's power-frequency operating point, its sequence impedances, and its frequency response up to about 2 kHz, from a single data file with no tuning other than the source EMF that fixes the slack voltage. The one systematic deviation, 1 % against the brochure table, belongs to the published data.
+**Scope of the validation.** The four levels together show that the model reproduces the benchmark's power-frequency operating point, its sequence impedances, and its frequency response up to about 2 kHz, from a single data file with no tuning other than the source EMF that fixes the slack voltage. The one systematic deviation, 1 % against the brochure table, belongs to the brochure's calculation conventions (Section 2.3), not to its data.
 
-**What is assumed.** The transformer core is ideal, with no magnetising current or saturation; the LV star points are solidly grounded; the zero-sequence impedance of the 110 kV equivalent equals its positive-sequence value; the loads are balanced and have no dynamics beyond the component's release logic. None of these is specified by the brochure. Each is a parameter of the model and can be changed by users who need it.
+**Modelling assumptions.** The transformer core is ideal, with no magnetising current or saturation; the LV star points are solidly grounded; the zero-sequence impedance of the 110 kV equivalent equals its positive-sequence value; the loads are balanced and have no dynamics beyond the component's release logic. None of these is specified by the brochure. Each is a parameter of the model and can be changed by users who need it.
 
-**What the model is not validated for.** Inrush and saturation transients, arc and breaker phenomena, unbalanced load-flow results, and behaviour above about 2 kHz, where lumped PI sections lose accuracy. Those are the natural next steps for anyone extending the model.
+**Unvalidated phenomena.** The model is not validated for inrush and saturation transients, arc and breaker phenomena, unbalanced load-flow results, or behaviour above about 2 kHz, where lumped PI sections lose accuracy. Those are the natural next steps for anyone extending the model.
 
-**On the load representation.** Constant power is the benchmark-faithful choice and the shipped default; constant impedance is the EMT-conventional choice and is one parameter away. The 0.6 to 0.8 % bias of the master-library load in constant-power mode is small, stable and documented. Users who need exact constant power can replace the loads with a controlled-current implementation, at the cost of custom code.
+**Load representation.** Constant power is the benchmark-faithful choice and the shipped default; constant impedance is the EMT-conventional choice and is one parameter away. The 0.6 to 0.8 % bias of the master-library load in constant-power mode is small, stable and documented. Users who need exact constant power can replace the loads with a controlled-current implementation, at the cost of custom code.
 
-**Relationship to CIGRE and to MHI.** This is an independent implementation of the published benchmark, with the parameters presented in the author's own tables and the diagram redrawn. It is not a CIGRE publication and CIGRE has not reviewed it; the brochure itself is copyrighted and is not redistributed. PSCAD is a product of Manitoba Hydro International; a licensed copy is required, and no part of the software or its libraries is redistributed.
-
-## 6. Using and rebuilding the model
-
-Open `CIGRE_MV_PSCAD.pswx` in PSCAD 5.0.2 or later and press Run. To change a load, edit the P and Q of its three single-phase blocks; to change its voltage dependence, edit the two exponents; to close a tie switch, set its constant to 0; to move the taps, edit the transformer's secondary rated voltage. To rebuild the model from the data file, with PSCAD's automation library and numpy installed:
-
-```
-python scripts/build_cigre_mv.py --run
-python scripts/validate_cigre_mv.py --bias 1.0077
-```
-
-The remaining scripts reproduce the short-circuit cases, the frequency scan and its reference, the time-step and meshed runs, and every figure in this paper.
-
-## 7. Conclusions and further work
-
-CIGRE-MV-PSCAD provides the CIGRE European MV benchmark as a validated, script-generated, master-library-only PSCAD model with documented assumptions. Planned extensions are an add-on library with the DER units of the brochure's Section 6.4, a line option built from the brochure's conductor geometry through PSCAD's line-constants routine, the companion European LV benchmark, and an event-based power-quality assessment framework built on this model for photovoltaic hosting-capacity studies, with DER behaviour per IEEE 1547 [14] and supply-quality limits per EN 50160 [15].
-
-## Acknowledgements
-
-The author thanks the CIGRE Task Force C6.04.02 for the benchmark definition. An earlier balanced EMT equivalent of this feeder built by the author with a custom constant-power load informed the load-model study in Section 3.4.
+**Relationship to CIGRE and to MHI.** This is an independent implementation of the published benchmark, with the parameters presented in the authors' own tables and the diagram redrawn. It is not a CIGRE publication and CIGRE has not reviewed it; the brochure itself is copyrighted and is not redistributed. PSCAD is a product of Manitoba Hydro International; a licensed copy is required, and no part of the software or its libraries is redistributed.
 
 ## Data and code availability
 
-The model, data file, scripts, validation results and figures are available in the repository named above under the BSD-3-Clause licence. A citation file is included.
+The PSCAD model, the data file with its page references, the scripts that build and validate the model, the validation results and the figures are available at https://github.com/panas-bhattarai/CIGRE-MV-PSCAD under the BSD-3-Clause licence. Version 1.0 of the repository corresponds to this paper.
 
 ## References
 
@@ -235,5 +228,3 @@ The model, data file, scripts, validation results and figures are available in t
 [16] M. Abad, M. García-Gracia, N. El Halabi and D. López Andía, "Network impulse response based-on fault location method for fault location in power distribution systems," *IET Generation, Transmission & Distribution*, vol. 10, no. 15, pp. 3962-3970, 2016, doi:10.1049/iet-gtd.2016.0765.
 
 [17] A. Gkountaras, T. Sezi and S. Dieckerhoff, "Real time simulation and stability evaluation of a medium voltage hybrid microgrid," *7th IET International Conference on Power Electronics, Machines and Drives (PEMD 2014)*, Manchester, 2014, doi:10.1049/cp.2014.0490.
-
-[18] P. Bhattarai, *CIGRE-MV-MATLAB: Simulink implementation of the CIGRE European MV distribution benchmark for EMT studies*, 2026. https://github.com/panas-bhattarai/CIGRE-MV-MATLAB
