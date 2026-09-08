@@ -9,7 +9,9 @@ authors:
     given-names: Rabindra
     email: rabindra.maharjan@equagen.com
 version: "1.0.0"
-date-released: "2026-09-04"
+date-released: "2026-09-08"
+doi: 10.5281/zenodo.22663701
+repository-code: https://github.com/panas-bhattarai/CIGRE-MV-PSCAD
 license: BSD-3-Clause
 references:
   - type: report

@@ -191,7 +191,7 @@ Figure 9 shows the first 500 ms of the base run: the source ramps up over 50 ms,
 
 ## Data and code availability
 
-The PSCAD model, the data file with its page references, the scripts that build and validate the model, the validation results and the figures are available at https://github.com/panas-bhattarai/CIGRE-MV-PSCAD under the BSD-3-Clause licence. Version 1.0 of the repository corresponds to this paper.
+The PSCAD model, the data file with its page references, the scripts that build and validate the model, the validation results and the figures are available at https://github.com/panas-bhattarai/CIGRE-MV-PSCAD under the BSD-3-Clause licence. Version 1.0 of the repository corresponds to this paper and is archived at https://doi.org/10.5281/zenodo.22663701.
 
 ## References
 
