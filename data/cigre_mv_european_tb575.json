@@ -2,16 +2,17 @@
  "meta": {
   "title": "CIGRE European MV distribution network benchmark - parameter extraction",
   "extraction_date": "2026-09-04",
+  "scope_and_copyright": "This file contains only the network parameters consumed by the PSCAD model and its validation scripts: HV equivalent, transformers and taps, buses, line segments with sequence parameters, loads, switches, and the radial reference power flow. It is not a reproduction of the brochure; the brochure's text, figures, conductor-geometry tables, DER case study and load-profile figures are not included. CIGRE holds the copyright on TB 575; the engineering parameters are reproduced here for interoperability so the model can be audited against its source.",
   "sources": [
    {
     "id": "TB575",
-    "citation": "CIGRE Task Force C6.04, 'Benchmark Systems for Network Integration of Renewable and Distributed Energy Resources', Technical Brochure 575, April 2014. Local file: Cigre Brochure.pdf (119 PDF pages). Page numbers in this file are PDF page indices; printed page number = PDF page - 18 in chapters 6 and 9.",
-    "sections_used": "4.3 (p.25), 6.2 (p.51-56), 6.3.5 (p.56), 6.4 (p.57-58), 9.2.4 (p.103-104), 9.3 (p.109-116)"
+    "citation": "CIGRE Task Force C6.04, 'Benchmark Systems for Network Integration of Renewable and Distributed Energy Resources', Technical Brochure 575, April 2014. Page numbers in this file are PDF page indices of the brochure; printed page number = PDF page - 18 in chapters 6 and 9.",
+    "sections_used": "6.2 (p.51-56), 9.2.4 (p.103-104), 9.3 (p.109-116)"
    },
    {
     "id": "Paper2006",
-    "citation": "K. Rudion, A. Orths, Z. A. Styczynski, K. Strunz, 'Design of benchmark of medium voltage distribution network for investigation of DG integration', IEEE PES General Meeting 2006. Local file: MV benchmark Paper.pdf (6 pages).",
-    "sections_used": "Sec. III, Fig. 3 (p.2); Table 1 loads (p.3); Table 2 DG units (p.4); Appendix Table 3 line data (p.5)"
+    "citation": "K. Rudion, A. Orths, Z. A. Styczynski, K. Strunz, 'Design of benchmark of medium voltage distribution network for investigation of DG integration', IEEE PES General Meeting 2006.",
+    "sections_used": "Sec. III, Fig. 3 (p.2); Table 1 loads (p.3); Appendix Table 3 line data (p.5)"
    }
   ],
   "units": {
@@ -21,10 +22,9 @@
    "susceptance": "microsiemens per km (uS/km)",
    "length": "km",
    "angle": "degrees",
-   "frequency": "Hz",
-   "geometry": "m for spacings/heights, cm for conductor diameter and GMR, mm for cable layer thicknesses"
+   "frequency": "Hz"
   },
-  "page_convention": "Every object carries a 'page' key = PDF page index in Cigre Brochure.pdf from which its numbers were read (text extraction cross-checked against rendered page images). Keys ending in '_derived' are computed here from printed values and are not printed in the brochure.",
+  "page_convention": "Every object carries a 'page' key = PDF page index of TB 575 from which its numbers were read (text extraction cross-checked against rendered page images). Keys ending in '_derived' are computed here from printed values and are not printed in the brochure.",
   "assumptions_and_uncertainties": [
    "Line sequence data (R1,X1,B1,R0,X0,B0) are taken verbatim from Table 6.12; the brochure states they were computed with modified Carson equations (Sec. 9.3.1/9.3.2) at earth resistivity 100 ohm-m, but does not print the intermediate phase/primitive matrices. The '_derived' capacitance values are B/(2*pi*50) computed here.",
    "Underground cable zero-sequence susceptance equals positive-sequence in Table 6.12 (47.493 uS/km both), consistent with a shielded single-core cable; overhead B0 (1.280) < B1 (3.172).",
@@ -167,46 +167,6 @@
    },
    "page": 54,
    "table": "6.13"
-  }
- ],
- "transformers_alternative_direct_220kV": [
-  {
-   "from_bus": 0,
-   "to_bus": 1,
-   "connection": "3-ph Dyn1",
-   "V1_kV": 220,
-   "V2_kV": 20,
-   "S_rated_MVA": 25,
-   "Z_ohm_ref_V2": {
-    "R": 0.19,
-    "X": 1.91
-   },
-   "Z_pu_on_rating_derived": {
-    "R_pct": 1.1875,
-    "X_pct": 11.9375
-   },
-   "page": 56,
-   "table": "6.17",
-   "use": "in lieu of 110 kV subtransmission when connecting directly to the HV transmission benchmark (Sec. 6.3.5)"
-  },
-  {
-   "from_bus": 0,
-   "to_bus": 12,
-   "connection": "3-ph Dyn1",
-   "V1_kV": 220,
-   "V2_kV": 20,
-   "S_rated_MVA": 25,
-   "Z_ohm_ref_V2": {
-    "R": 0.19,
-    "X": 1.91
-   },
-   "Z_pu_on_rating_derived": {
-    "R_pct": 1.1875,
-    "X_pct": 11.9375
-   },
-   "page": 56,
-   "table": "6.17",
-   "use": "same"
   }
  ],
  "buses": [
@@ -550,19 +510,6 @@
   "1": {
    "installation": "overhead",
    "conductor_type": "A1 (IEC 61089 all-aluminium)",
-   "stranding": 7,
-   "cross_section_mm2": 63,
-   "dc_conductor_diameter_cm": 1.02,
-   "GMR_cm": 0.37,
-   "Rdc_20C_ohm_per_km": 0.4545,
-   "Rac_50C_ohm_per_km": 0.51,
-   "geometry": {
-    "a_height_above_ground_m": 9.5,
-    "b_phase_spacing_m": 1.0,
-    "arrangement": "three conductors horizontal (flat), no neutral wire, spacing b between adjacent conductors, height a",
-    "earth_resistivity_ohm_m": 100,
-    "geometry_page": 53
-   },
    "sequence_parameters": {
     "R1_ohm_per_km": 0.51,
     "X1_ohm_per_km": 0.366,
@@ -574,29 +521,12 @@
     "C0_nF_per_km_derived": 4.074,
     "page": 54
    },
-   "page": 53,
-   "tables": "6.9, 6.10"
+   "page": 54,
+   "tables": "6.12 (sequence parameters); construction and geometry in Tables 6.9-6.11 are not reproduced"
   },
   "2": {
    "installation": "underground",
    "conductor_type": "NA2XS2Y (DIN VDE: single-core XLPE, Al conductor, Cu tape shield, PE jacket)",
-   "stranding": 19,
-   "cross_section_mm2": 120,
-   "dc_conductor_diameter_cm": 1.24,
-   "GMR_cm": 0.48,
-   "Rdc_20C_ohm_per_km": 0.253,
-   "Rac_90C_ohm_per_km": 0.338,
-   "insulation_thickness_ti_mm": 5.5,
-   "jacket_thickness_tj_mm": 2.5,
-   "tape_shield_thickness_tts_mm": 0.2,
-   "overall_diameter_dov_mm": 34.2,
-   "geometry": {
-    "a_burial_depth_m": 0.7,
-    "b_cable_spacing_m": 0.3,
-    "arrangement": "three single-core cables side by side (flat) at depth a, spacing b, in back-filled trench with protective plate",
-    "earth_resistivity_ohm_m": 100,
-    "geometry_page": 53
-   },
    "sequence_parameters": {
     "R1_ohm_per_km": 0.501,
     "X1_ohm_per_km": 0.716,
@@ -608,8 +538,8 @@
     "C0_nF_per_km_derived": 151.175,
     "page": 54
    },
-   "page": 53,
-   "tables": "6.9, 6.11"
+   "page": 54,
+   "tables": "6.12 (sequence parameters); construction and geometry in Tables 6.9-6.11 are not reproduced"
   }
  },
  "loads": [
@@ -940,106 +870,6 @@
    "note": "if two different substations are assumed, 110 kV subtransmission lines of Sec. 5.3.4 should connect the HV equivalent to each transformer",
    "page": 52
   }
- },
- "der_units": [
-  {
-   "bus": 3,
-   "type": "Photovoltaic",
-   "P_max_kW": 20,
-   "page": 58
-  },
-  {
-   "bus": 4,
-   "type": "Photovoltaic",
-   "P_max_kW": 20,
-   "page": 58
-  },
-  {
-   "bus": 5,
-   "type": "Photovoltaic",
-   "P_max_kW": 30,
-   "page": 58
-  },
-  {
-   "bus": 5,
-   "type": "Battery",
-   "P_max_kW": 600,
-   "page": 58
-  },
-  {
-   "bus": 5,
-   "type": "Residential fuel cell",
-   "P_max_kW": 33,
-   "page": 58
-  },
-  {
-   "bus": 6,
-   "type": "Photovoltaic",
-   "P_max_kW": 30,
-   "page": 58
-  },
-  {
-   "bus": 7,
-   "type": "Wind turbine",
-   "P_max_kW": 1500,
-   "page": 58
-  },
-  {
-   "bus": 8,
-   "type": "Photovoltaic",
-   "P_max_kW": 30,
-   "page": 58
-  },
-  {
-   "bus": 9,
-   "type": "Photovoltaic",
-   "P_max_kW": 30,
-   "page": 58
-  },
-  {
-   "bus": 9,
-   "type": "CHP diesel",
-   "P_max_kW": 310,
-   "page": 58
-  },
-  {
-   "bus": 9,
-   "type": "CHP fuel cell",
-   "P_max_kW": 212,
-   "page": 58
-  },
-  {
-   "bus": 10,
-   "type": "Photovoltaic",
-   "P_max_kW": 40,
-   "page": 58
-  },
-  {
-   "bus": 10,
-   "type": "Battery",
-   "P_max_kW": 200,
-   "page": 58
-  },
-  {
-   "bus": 10,
-   "type": "Residential fuel cell",
-   "P_max_kW": 14,
-   "page": 58
-  },
-  {
-   "bus": 11,
-   "type": "Photovoltaic",
-   "P_max_kW": 10,
-   "page": 58
-  }
- ],
- "der_case_study_notes": {
-  "tool": "PSS NETOMAC",
-  "hv_voltage_kV": 220,
-  "pv_and_wind": "stochastic output",
-  "fuel_cell_and_chp": "deterministic output",
-  "wind_rating_MW": 1.5,
-  "page": 57
  },
  "powerflow_reference": {
   "configuration": "radial base case, S1=S2=S3 open, tap settings per Table 9.7 (TR1 secondary +6.250 %, TR2 secondary +3.125 %, primaries 0 %)",
@@ -1503,408 +1333,6 @@
   "notes": "No losses or P/Q flows are tabulated; only V and I. No results for meshed or interconnected configurations.",
   "page": "103-104",
   "table": "9.6 / 9.7"
- },
- "load_profiles": {
-  "source": "Figure 6.4, digitised (see meta)",
-  "units": "pu of node peak apparent power",
-  "time_step_h": 0.5,
-  "residential": [
-   {
-    "t_h": 0.0,
-    "S_pu_of_max": 0.25
-   },
-   {
-    "t_h": 0.5,
-    "S_pu_of_max": 0.21
-   },
-   {
-    "t_h": 1.0,
-    "S_pu_of_max": 0.21
-   },
-   {
-    "t_h": 1.5,
-    "S_pu_of_max": 0.19
-   },
-   {
-    "t_h": 2.0,
-    "S_pu_of_max": 0.19
-   },
-   {
-    "t_h": 2.5,
-    "S_pu_of_max": 0.18
-   },
-   {
-    "t_h": 3.0,
-    "S_pu_of_max": 0.18
-   },
-   {
-    "t_h": 3.5,
-    "S_pu_of_max": 0.2
-   },
-   {
-    "t_h": 4.0,
-    "S_pu_of_max": 0.19
-   },
-   {
-    "t_h": 4.5,
-    "S_pu_of_max": 0.2
-   },
-   {
-    "t_h": 5.0,
-    "S_pu_of_max": 0.24
-   },
-   {
-    "t_h": 5.5,
-    "S_pu_of_max": 0.28
-   },
-   {
-    "t_h": 6.0,
-    "S_pu_of_max": 0.42
-   },
-   {
-    "t_h": 6.5,
-    "S_pu_of_max": 0.52
-   },
-   {
-    "t_h": 7.0,
-    "S_pu_of_max": 0.61
-   },
-   {
-    "t_h": 7.5,
-    "S_pu_of_max": 0.62
-   },
-   {
-    "t_h": 8.0,
-    "S_pu_of_max": 0.64
-   },
-   {
-    "t_h": 8.5,
-    "S_pu_of_max": 0.68
-   },
-   {
-    "t_h": 9.0,
-    "S_pu_of_max": 0.63
-   },
-   {
-    "t_h": 9.5,
-    "S_pu_of_max": 0.65
-   },
-   {
-    "t_h": 10.0,
-    "S_pu_of_max": 0.67
-   },
-   {
-    "t_h": 10.5,
-    "S_pu_of_max": 0.62
-   },
-   {
-    "t_h": 11.0,
-    "S_pu_of_max": 0.61
-   },
-   {
-    "t_h": 11.5,
-    "S_pu_of_max": 0.69
-   },
-   {
-    "t_h": 12.0,
-    "S_pu_of_max": 0.73
-   },
-   {
-    "t_h": 12.5,
-    "S_pu_of_max": 0.72
-   },
-   {
-    "t_h": 13.0,
-    "S_pu_of_max": 0.66
-   },
-   {
-    "t_h": 13.5,
-    "S_pu_of_max": 0.58
-   },
-   {
-    "t_h": 14.0,
-    "S_pu_of_max": 0.56
-   },
-   {
-    "t_h": 14.5,
-    "S_pu_of_max": 0.49
-   },
-   {
-    "t_h": 15.0,
-    "S_pu_of_max": 0.49
-   },
-   {
-    "t_h": 15.5,
-    "S_pu_of_max": 0.47
-   },
-   {
-    "t_h": 16.0,
-    "S_pu_of_max": 0.47
-   },
-   {
-    "t_h": 16.5,
-    "S_pu_of_max": 0.53
-   },
-   {
-    "t_h": 17.0,
-    "S_pu_of_max": 0.64
-   },
-   {
-    "t_h": 17.5,
-    "S_pu_of_max": 0.73
-   },
-   {
-    "t_h": 18.0,
-    "S_pu_of_max": 0.8
-   },
-   {
-    "t_h": 18.5,
-    "S_pu_of_max": 0.87
-   },
-   {
-    "t_h": 19.0,
-    "S_pu_of_max": 0.92
-   },
-   {
-    "t_h": 19.5,
-    "S_pu_of_max": 0.87
-   },
-   {
-    "t_h": 20.0,
-    "S_pu_of_max": 0.82
-   },
-   {
-    "t_h": 20.5,
-    "S_pu_of_max": 0.74
-   },
-   {
-    "t_h": 21.0,
-    "S_pu_of_max": 0.68
-   },
-   {
-    "t_h": 21.5,
-    "S_pu_of_max": 0.65
-   },
-   {
-    "t_h": 22.0,
-    "S_pu_of_max": 0.56
-   },
-   {
-    "t_h": 22.5,
-    "S_pu_of_max": 0.48
-   },
-   {
-    "t_h": 23.0,
-    "S_pu_of_max": 0.39
-   },
-   {
-    "t_h": 23.5,
-    "S_pu_of_max": 0.31
-   },
-   {
-    "t_h": 24.0,
-    "S_pu_of_max": 0.28
-   }
-  ],
-  "commercial_industrial": [
-   {
-    "t_h": 0.0,
-    "S_pu_of_max": 0.34
-   },
-   {
-    "t_h": 0.5,
-    "S_pu_of_max": 0.33
-   },
-   {
-    "t_h": 1.0,
-    "S_pu_of_max": 0.32
-   },
-   {
-    "t_h": 1.5,
-    "S_pu_of_max": 0.3
-   },
-   {
-    "t_h": 2.0,
-    "S_pu_of_max": 0.29
-   },
-   {
-    "t_h": 2.5,
-    "S_pu_of_max": 0.29
-   },
-   {
-    "t_h": 3.0,
-    "S_pu_of_max": 0.31
-   },
-   {
-    "t_h": 3.5,
-    "S_pu_of_max": 0.34
-   },
-   {
-    "t_h": 4.0,
-    "S_pu_of_max": 0.38
-   },
-   {
-    "t_h": 4.5,
-    "S_pu_of_max": 0.42
-   },
-   {
-    "t_h": 5.0,
-    "S_pu_of_max": 0.47
-   },
-   {
-    "t_h": 5.5,
-    "S_pu_of_max": 0.55
-   },
-   {
-    "t_h": 6.0,
-    "S_pu_of_max": 0.67
-   },
-   {
-    "t_h": 6.5,
-    "S_pu_of_max": 0.8
-   },
-   {
-    "t_h": 7.0,
-    "S_pu_of_max": 0.88
-   },
-   {
-    "t_h": 7.5,
-    "S_pu_of_max": 0.94
-   },
-   {
-    "t_h": 8.0,
-    "S_pu_of_max": 0.98
-   },
-   {
-    "t_h": 8.5,
-    "S_pu_of_max": 0.99
-   },
-   {
-    "t_h": 9.0,
-    "S_pu_of_max": 0.98
-   },
-   {
-    "t_h": 9.5,
-    "S_pu_of_max": 1.0
-   },
-   {
-    "t_h": 10.0,
-    "S_pu_of_max": 0.98
-   },
-   {
-    "t_h": 10.5,
-    "S_pu_of_max": 0.88
-   },
-   {
-    "t_h": 11.0,
-    "S_pu_of_max": 0.79
-   },
-   {
-    "t_h": 11.5,
-    "S_pu_of_max": 0.8
-   },
-   {
-    "t_h": 12.0,
-    "S_pu_of_max": 0.83
-   },
-   {
-    "t_h": 12.5,
-    "S_pu_of_max": 0.85
-   },
-   {
-    "t_h": 13.0,
-    "S_pu_of_max": 0.86
-   },
-   {
-    "t_h": 13.5,
-    "S_pu_of_max": 0.86
-   },
-   {
-    "t_h": 14.0,
-    "S_pu_of_max": 0.86
-   },
-   {
-    "t_h": 14.5,
-    "S_pu_of_max": 0.86
-   },
-   {
-    "t_h": 15.0,
-    "S_pu_of_max": 0.86
-   },
-   {
-    "t_h": 15.5,
-    "S_pu_of_max": 0.85
-   },
-   {
-    "t_h": 16.0,
-    "S_pu_of_max": 0.79
-   },
-   {
-    "t_h": 16.5,
-    "S_pu_of_max": 0.62
-   },
-   {
-    "t_h": 17.0,
-    "S_pu_of_max": 0.55
-   },
-   {
-    "t_h": 17.5,
-    "S_pu_of_max": 0.52
-   },
-   {
-    "t_h": 18.0,
-    "S_pu_of_max": 0.5
-   },
-   {
-    "t_h": 18.5,
-    "S_pu_of_max": 0.46
-   },
-   {
-    "t_h": 19.0,
-    "S_pu_of_max": 0.46
-   },
-   {
-    "t_h": 19.5,
-    "S_pu_of_max": 0.45
-   },
-   {
-    "t_h": 20.0,
-    "S_pu_of_max": 0.42
-   },
-   {
-    "t_h": 20.5,
-    "S_pu_of_max": 0.38
-   },
-   {
-    "t_h": 21.0,
-    "S_pu_of_max": 0.39
-   },
-   {
-    "t_h": 21.5,
-    "S_pu_of_max": 0.39
-   },
-   {
-    "t_h": 22.0,
-    "S_pu_of_max": 0.36
-   },
-   {
-    "t_h": 22.5,
-    "S_pu_of_max": 0.35
-   },
-   {
-    "t_h": 23.0,
-    "S_pu_of_max": 0.35
-   },
-   {
-    "t_h": 23.5,
-    "S_pu_of_max": 0.35
-   },
-   {
-    "t_h": 24.0,
-    "S_pu_of_max": 0.34
-   }
-  ],
-  "page": 51
  },
  "cross_check_2006_paper": {
   "loads_pu_base_inferred_MVA": 100,

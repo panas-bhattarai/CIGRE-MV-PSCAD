@@ -1,11 +1,13 @@
 # CIGRE European MV Distribution Network Benchmark – extracted parameters
 
-Extracted 2026-09-04 from two documents the user holds locally:
+Parameters transcribed on 2026-09-04 from the two source documents of the benchmark:
 
-- **TB 575**: CIGRE TF C6.04, *Benchmark Systems for Network Integration of Renewable and Distributed Energy Resources*, Technical Brochure 575, April 2014 (`Source/Cigre Brochure.pdf`, 119 PDF pages). All page references below are **PDF page indices** (printed page = PDF page − 18 in chapters 6 and 9).
-- **Paper 2006**: Rudion, Orths, Styczynski, Strunz, *Design of benchmark of medium voltage distribution network for investigation of DG integration*, IEEE PES GM 2006 (`Source/MV benchmark Paper.pdf`, 6 pages).
+- **TB 575**: CIGRE TF C6.04, *Benchmark Systems for Network Integration of Renewable and Distributed Energy Resources*, Technical Brochure 575, April 2014. All page references below are **PDF page indices** of the brochure (printed page = PDF page − 18 in chapters 6 and 9).
+- **Paper 2006**: Rudion, Orths, Styczynski, Strunz, *Design of benchmark of medium voltage distribution network for investigation of DG integration*, IEEE PES GM 2006.
 
-Machine-readable twin: `data/cigre_mv_european_tb575.json`. Numbers are reproduced exactly as printed; anything I computed myself is marked *derived*.
+Machine-readable twin: `data/cigre_mv_european_tb575.json`. Numbers are reproduced exactly as printed; values computed from printed numbers are marked *derived*.
+
+**Scope and copyright.** This file lists only the network parameters that the PSCAD model and its validation scripts consume, together with the cross-checks against the 2006 paper. It is not a reproduction of the brochure: the brochure's text, figures, conductor-geometry tables, DER case study and load-profile figures are not reproduced, and readers who need them should obtain TB 575 from CIGRE (e-cigre.org). The engineering parameters are reproduced for interoperability, so that the model can be audited against its source page by page. CIGRE holds the copyright on the brochure.
 
 ---
 
@@ -30,7 +32,7 @@ Cross-check with Paper 2006 (p.2): 20 kV, fed from 110 kV, rural character, subn
 
 ## 2. HV grid equivalent
 
-Source: TB 575 PDF p.54 (Table 6.14), p.25 (Table 4.2), p.57
+Source: TB 575 PDF p.54 (Table 6.14), p.57
 
 | Parameter | Value | Note |
 |---|---|---|
@@ -40,15 +42,13 @@ Source: TB 575 PDF p.54 (Table 6.14), p.25 (Table 4.2), p.57
 | Z (*derived*) | 2.42 Ω | 110² / 5000 |
 | X, R (*derived*) | 2.408 Ω, 0.2408 Ω | from R/X = 0.1 |
 
-Generic European ranges of Table 4.2 (p.25), for the resource-side benchmark and not specific to this network: LV 0.4 kV, 1–10 MVA, R/X 0.70–11.00; MV 20 kV, 100–1000 MVA, R/X 0.40–2.00; HV 220 kV, 5000–20000 MVA, R/X 0.07–0.60.
-
 The DER case study of Sec. 6.4.1 (p.57) sets the HV side at 220 kV.
 
 Paper 2006 gives no source-impedance data (row 0–1 in its Table 3 is blank).
 
 ## 3. Transformers
 
-Source: TB 575 PDF p.54 (Table 6.13), p.104 (Table 9.7), p.56 (Table 6.17)
+Source: TB 575 PDF p.54 (Table 6.13), p.104 (Table 9.7)
 
 | From | To | Connection | V1 / V2 | S_rated | Z_tr (referred to 20 kV side) | Z on own base (*derived*, Z_base = 16 Ω) |
 |---|---|---|---|---|---|---|
@@ -62,7 +62,7 @@ Tap-changer specification used for the reference power flow (p.54): primary ±5 
 | 0–1 (feeder 1) | 0 % | +6.250 % |
 | 0–12 (feeder 2) | 0 % | +3.125 % |
 
-Alternative transformers for direct connection to the 220 kV transmission benchmark (p.56, Table 6.17): both 3-ph Dyn1, 220/20 kV, 25 MVA, 0.19 + j1.91 Ω referred to 20 kV (*derived*: 1.1875 % + j11.9375 %).
+The brochure also specifies alternative 220/20 kV transformers for direct connection to the transmission benchmark (p.56, Table 6.17); they are not used by this model and are not reproduced here.
 
 Neutral treatment of the Dyn1 star point is **not** specified.
 
@@ -113,30 +113,7 @@ Cross-check with Paper 2006 Table 3 (p.5): the paper gives per-segment R', X', C
 
 ## 7. Line types – conductor data and geometry
 
-Source: TB 575 PDF p.53 (Figure 6.6, Tables 6.9, 6.10, 6.11)
-
-Geometry (Table 6.9):
-
-| Installation | a [m] | b [m] | Meaning |
-|---|---|---|---|
-| Overhead | 9.5 | 1.0 | a = conductor height above ground, b = horizontal spacing between adjacent phases; three conductors in a flat arrangement, no neutral wire |
-| Underground | 0.7 | 0.3 | a = burial depth, b = spacing between the three single-core cables laid flat |
-
-Overhead conductor (Table 6.10):
-
-| Cond. ID | Type | Stranding | Area [mm²] | d_c [cm] | GMR [cm] | R'dc 20 °C [Ω/km] | R'ac 50 °C [Ω/km] |
-|---|---|---|---|---|---|---|---|
-| 1 | A1 (IEC 61089) | 7 | 63 | 1.02 | 0.370 | 0.4545 | 0.5100 |
-
-Underground cable (Table 6.11):
-
-| Cond. ID | Type | Stranding | Area [mm²] | d_c [cm] | GMR [cm] | R'dc 20 °C [Ω/km] | R'ac 90 °C [Ω/km] | t_i [mm] | t_j [mm] | t_ts [mm] | d_ov [mm] |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| 2 | NA2XS2Y | 19 | 120 | 1.24 | 0.480 | 0.253 | 0.338 | 5.5 | 2.5 | 0.2 | 34.2 |
-
-t_i = insulation thickness, t_j = jacket thickness, t_ts = copper tape-shield thickness, d_ov = overall diameter. Layer order per Figure 6.6: conductor – insulation – tape shield – jacket.
-
-Paper 2006 gives no conductor or geometry data.
+TB 575 PDF p.53 (Figure 6.6, Tables 6.9–6.11) gives the tower/trench geometry and the conductor and cable construction data (A1 63 mm² overhead conductor; NA2XS2Y 120 mm² cable) from which the sequence parameters of Section 6 were computed. The model uses the sequence parameters directly, so these tables are not reproduced here; see the brochure. Paper 2006 gives no conductor or geometry data.
 
 ## 8. Loads
 
@@ -169,21 +146,7 @@ Cross-check with Paper 2006 Table 1 (p.3) — see Section 14 for the full table.
 
 ## 9. Daily load profiles
 
-Source: TB 575 PDF p.51 (Figure 6.4) — **digitised by me from the plotted curves**, not tabulated in the brochure. Accuracy roughly ±0.02 pu; half-hour samples are in the JSON.
-
-| t [h] | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Residential | 0.25 | 0.21 | 0.19 | 0.18 | 0.19 | 0.24 | 0.42 | 0.61 | 0.64 | 0.63 | 0.67 | 0.61 | 0.73 |
-| Comm./Ind. | 0.34 | 0.32 | 0.29 | 0.31 | 0.38 | 0.47 | 0.67 | 0.88 | 0.98 | 0.98 | 0.98 | 0.79 | 0.83 |
-
-| t [h] | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Residential | 0.66 | 0.56 | 0.49 | 0.47 | 0.64 | 0.80 | 0.92 | 0.82 | 0.68 | 0.56 | 0.39 | 0.28 |
-| Comm./Ind. | 0.86 | 0.86 | 0.86 | 0.79 | 0.55 | 0.50 | 0.46 | 0.42 | 0.39 | 0.36 | 0.35 | 0.34 |
-
-Values are per-unit of each node's peak apparent power. Residential peak ≈ 0.92 near 19 h; commercial/industrial reaches 1.0 between about 8 and 10 h.
-
-Paper 2006 shows the same two curves (Figs. 4 and 5, p.3) as pictures only.
+TB 575 PDF p.51 (Figure 6.4) shows residential and commercial/industrial daily load curves as figures only; no values are tabulated in the brochure. The model represents the peak-load operating point of Table 6.15 and does not use the profiles, so they are not reproduced. Paper 2006 shows the same two curves (Figs. 4 and 5, p.3), also as pictures only.
 
 ## 10. Configuration switches
 
@@ -201,29 +164,7 @@ Paper 2006 Fig. 3 (p.2) marks "T" (open in normal operation) at the same two pla
 
 ## 11. DER units (case study, Sec. 6.4)
 
-Source: TB 575 PDF p.58 (Table 6.18); modelling notes p.57
-
-| Bus | Type | P_max [kW] |
-|---|---|---|
-| 3 | Photovoltaic | 20 |
-| 4 | Photovoltaic | 20 |
-| 5 | Photovoltaic | 30 |
-| 5 | Battery | 600 |
-| 5 | Residential fuel cell | 33 |
-| 6 | Photovoltaic | 30 |
-| 7 | Wind turbine | 1500 |
-| 8 | Photovoltaic | 30 |
-| 9 | Photovoltaic | 30 |
-| 9 | CHP diesel | 310 |
-| 9 | CHP fuel cell | 212 |
-| 10 | Photovoltaic | 40 |
-| 10 | Battery | 200 |
-| 10 | Residential fuel cell | 14 |
-| 11 | Photovoltaic | 10 |
-
-PV and wind were modelled as stochastic sources, fuel cells and CHP as deterministic; the simulation tool was PSS NETOMAC with the HV side at 220 kV.
-
-Cross-check with Paper 2006 Table 2 (p.4): identical list — **agrees**.
+TB 575 PDF p.57–58 (Table 6.18) lists the photovoltaic, wind, battery, fuel-cell and CHP units of the brochure's DER case study, simulated there in PSS NETOMAC with the HV side at 220 kV. Paper 2006 Table 2 (p.4) gives the same list. The DER case study is outside the scope of this model, which ships the passive network only, and the table is not reproduced.
 
 ## 12. Reference power flow (radial base case)
 
@@ -284,7 +225,7 @@ Things the brochure does not provide (or provides only partially) that an EMT mo
 7. **Switch/breaker models**: S1–S3 have no ratings, timing, or arc data.
 8. **Loads**: only S and pf at peak; no ZIP/voltage-dependence or motor share, no per-phase unbalance (10 % suggested only as a guideline), no harmonics.
 9. **DER**: only P_max; no converter topology, control, reactive capability, short-circuit contribution, or filter data. The daily generation curves of Fig. 6.8 are pictures only.
-10. **Load profiles** exist only as a figure; the tabulated values here are digitised (±0.02 pu).
+10. **Load profiles** exist only as a figure (Fig. 6.4); no tabulated values are given.
 11. **Transformer tap** is given as the setting used in the power flow, not as an OLTC controller (deadband, delay).
 12. **Power flow reference** exists only for the radial case; nothing to validate meshed or tied operation, and no loss figures.
 13. **Line ratings / ampacity** are not given.
