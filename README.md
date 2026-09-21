@@ -5,7 +5,7 @@
 <td align="center" valign="top"><b>Rabindra Maharjan</b><br>rabindra.maharjan@equagen.com</td>
 </tr></table>
 
-<p class="meta" align="center">September 2026. Version 1.0. Licence BSD-3-Clause.</p>
+<p class="meta" align="center">September 2026. Version 1.0. Licence BSD-3-Clause.<br>Preprint: https://doi.org/10.13140/RG.2.2.16467.95521</p>
 
 ## Abstract
 

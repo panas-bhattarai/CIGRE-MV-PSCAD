@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this model, please cite it as below and cite CIGRE Technical Brochure 575."
+message: "If you use this model, please cite the paper given under preferred-citation, the archived model by its Zenodo DOI, and CIGRE Technical Brochure 575."
 title: "CIGRE-MV-PSCAD: PSCAD implementation of the CIGRE European MV distribution benchmark for EMT studies"
 authors:
   - family-names: Bhattarai
@@ -13,6 +13,19 @@ date-released: "2026-09-08"
 doi: 10.5281/zenodo.22663701
 repository-code: https://github.com/panas-bhattarai/CIGRE-MV-PSCAD
 license: BSD-3-Clause
+preferred-citation:
+  type: article
+  status: preprint
+  title: "CIGRE-MV-PSCAD: an open PSCAD implementation of the CIGRE European medium-voltage benchmark network for electromagnetic transient studies"
+  authors:
+    - family-names: Bhattarai
+      given-names: Panas
+    - family-names: Maharjan
+      given-names: Rabindra
+  year: 2026
+  month: 9
+  doi: 10.13140/RG.2.2.16467.95521
+  url: https://doi.org/10.13140/RG.2.2.16467.95521
 references:
   - type: report
     title: "Benchmark Systems for Network Integration of Renewable and Distributed Energy Resources"
