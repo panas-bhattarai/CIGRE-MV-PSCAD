@@ -1,4 +1,4 @@
-"""Render README.md (the paper) to docs/paper.html and docs/paper.pdf.
+"""Render README.md (the paper) to build/paper.html and build/paper.pdf (not tracked in git).
 
 HTML: python-markdown with tables, toc ids and fenced code; every figure image is
 embedded as a base64 data URI so the file is self-contained. PDF: headless Microsoft
@@ -10,8 +10,9 @@ import markdown
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, ".."))
 SRC = os.path.join(ROOT, "README.md")
-HTML = os.path.join(ROOT, "docs", "paper.html")
-PDF = os.path.join(ROOT, "docs", "paper.pdf")
+OUT = os.path.join(ROOT, "build"); os.makedirs(OUT, exist_ok=True)
+HTML = os.path.join(OUT, "paper.html")
+PDF = os.path.join(OUT, "paper.pdf")
 
 STYLE = """<!doctype html><html><head><meta charset='utf-8'><title>CIGRE-MV-PSCAD</title><style>
 body{font-family:Georgia,'Times New Roman',serif;font-size:11pt;line-height:1.45;max-width:190mm;margin:20mm auto;color:#111}
@@ -49,7 +50,7 @@ def main():
 
     exe = next((b for b in BROWSERS if os.path.exists(b)), shutil.which("msedge") or shutil.which("chrome"))
     if not exe:
-        sys.exit("no Edge/Chrome found for PDF export; open docs/paper.html and print to PDF manually")
+        sys.exit("no Edge/Chrome found for PDF export; open build/paper.html and print to PDF manually")
     url = "file:///" + HTML.replace("\\", "/")
     import tempfile
     # a private profile keeps the export independent of any running browser and of its page cache

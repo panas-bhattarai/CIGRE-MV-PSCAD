@@ -17,3 +17,6 @@
 *.psout
 __pycache__/
 *.pyc
+
+# rendered paper (scripts/make_paper.py): local only
+build/
